@@ -1,8 +1,8 @@
-# STM32 通用库
+# 嵌入式通用库
 
-> **⚠️ 个人自用项目** - 本仓库为个人学习和项目开发过程中整理的STM32组件库，代码质量和文档仅供参考，不保证生产环境可用性。
+> **⚠️ 个人自用项目** - 本仓库为个人学习和项目开发过程中整理的嵌入式组件库，支持多平台（STM32/STC/Arduino等），代码质量和文档仅供参考，不保证生产环境可用性。
 
-适用于STM32嵌入式开发的通用组件库集合，涵盖控制算法、数据结构、外设驱动等常用功能。
+适用于嵌入式开发的通用组件库集合，涵盖控制算法、数据结构、外设驱动等常用功能。支持多种单片机平台。
 
 ## 库列表
 
@@ -12,77 +12,86 @@
 - ⚙️ **硬件依赖** - 需要根据实际硬件修改GPIO/外设配置
 - 📦 **第三方库** - 开源第三方组件
 - 🔧 **应用模块** - 需要特定库组合或项目配置
+- 🎯 **平台标识** - [STM32] / [STC16] / [通用]
 
 ### ✅ 通用算法模块
 
-| 库名 | 说明 | 依赖 | 来源 |
-|------|------|------|------|
-| [pid](./pid) | PID控制器，支持位置式和增量式算法 | 无 | 忘了哪来的了 |
-| [ringbuffer](./ringbuffer) | 环形缓冲区，适用于串口等数据收发 | 无 | 从RT-Thread抄的 |
-| [scheduler](./scheduler) | 任务调度器，基于时间片的非抢占式调度 | 无 | 从RTOS抄的 |
-| [kalman](./kalman) | 卡尔曼滤波器，一维信号滤波 | 无 | 忘了哪来的了 |
-| [bit_array](./bit_array) | 位数组操作库，Header-only | 无 | 忘了哪来的了 |
-| [usart_pack](./usart_pack) | 串口数据包协议，支持多类型打包/解包 | 无 | 忘了哪来的了 |
-| [fft](./fft) | FFT频谱分析，支持THD/SINAD测量 | CMSIS-DSP | 玩信号时用过 |
-| [imu_fusion](./imu_fusion) | IMU九轴融合算法（Madgwick+Kalman） | wp_math(可选) | |
-| [wp_math](./wp_math) | 高性能数学库，100+优化函数（3~10倍提速） | 无 | |
-| [multi_timer](./multi_timer) | 软件定时器管理器（无需RTOS） | 无 | 网友那拿的 |
+| 库名 | 说明 | 平台 | 依赖 | 来源 |
+|------|------|------|------|------|
+| [pid](./pid) | PID控制器，支持位置式和增量式算法 | 通用 | 无 | 忘了哪来的了 |
+| [ringbuffer](./ringbuffer) | 环形缓冲区，适用于串口等数据收发 | 通用 | 无 | 从RT-Thread抄的 |
+| [scheduler](./scheduler) | 任务调度器，基于时间片的非抢占式调度 | 通用 | 无 | 从RTOS抄的 |
+| [kalman](./kalman) | 卡尔曼滤波器，一维信号滤波 | 通用 | 无 | 忘了哪来的了 |
+| [bit_array](./bit_array) | 位数组操作库，Header-only | 通用 | 无 | 忘了哪来的了 |
+| [usart_pack](./usart_pack) | 串口数据包协议，支持多类型打包/解包 | 通用 | 无 | 忘了哪来的了 |
+| [fft](./fft) | FFT频谱分析，支持THD/SINAD测量 | STM32 | CMSIS-DSP | 玩信号时用过 |
+| [imu_fusion](./imu_fusion) | IMU九轴融合算法（Madgwick+Kalman） | 通用 | wp_math(可选) | |
+| [wp_math](./wp_math) | 高性能数学库，100+优化函数（3~10倍提速） | 通用 | 无 | |
+| [multi_timer](./multi_timer) | 软件定时器管理器（无需RTOS） | 通用 | 无 | 网友那拿的 |
+| [lq_balance](./lq_balance) | 平衡车控制算法（双闭环PID） | STC16 | LQ系列 | 网友那拿的 |
+| [math_lib](./math_lib) | 数学工具函数（map/Clamp） | 通用 | 无 | 网友那拿的 |
+| [ano_dt](./ano_dt) | 匿名地面站通信协议 | 通用 | 串口 | 网友那拿的 |
 
 ### ⚙️ 硬件驱动模块（需修改配置）
 
 #### 传感器驱动
 
-| 库名 | 说明 | 依赖 | 配置要求 | 来源 |
-|------|------|------|----------|------|
-| [bno08x](./bno08x) | BNO08X九轴IMU驱动（高精度±0.5°） | STM32 HAL | **必须修改UART/I2C接口** | 网友那拿的 |
-| [jy901s](./jy901s) | JY901S九轴IMU驱动（UART直出角度） | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
-| [hwt101](./hwt101) | HWT101陀螺仪驱动（带校准） | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
-| [mpu6050_dmp](./mpu6050_dmp) | MPU6050完整驱动（含DMP固件） | STM32 HAL | **必须修改I2C接口** | 网友那拿的 |
-| [grayscale](./grayscale) | 8通道灰度传感器驱动（I2C） | STM32 HAL | **必须修改I2C接口** | 网友那拿的 |
-| [encoder](./encoder) | 编码器驱动库，支持速度测量和位置累计 | STM32 HAL | 修改定时器配置 | 网友那拿的 |
+| 库名 | 说明 | 平台 | 依赖 | 配置要求 | 来源 |
+|------|------|------|------|----------|------|
+| [bno08x](./bno08x) | BNO08X九轴IMU驱动（高精度±0.5°） | STM32 | STM32 HAL | **必须修改UART/I2C接口** | 网友那拿的 |
+| [jy901s](./jy901s) | JY901S九轴IMU驱动（UART直出角度） | STM32 | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
+| [hwt101](./hwt101) | HWT101陀螺仪驱动（带校准） | STM32 | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
+| [mpu6050_dmp](./mpu6050_dmp) | MPU6050完整驱动（含DMP固件） | STM32 | STM32 HAL | **必须修改I2C接口** | 网友那拿的 |
+| [lq_icm20689](./lq_icm20689) | ICM20689六轴IMU驱动（SPI） | STC16 | LQ_SPI | **必须修改SPI接口** | 网友那拿的 |
+| [grayscale](./grayscale) | 8通道灰度传感器驱动（I2C） | STM32 | STM32 HAL | **必须修改I2C接口** | 网友那拿的 |
+| [encoder](./encoder) | 编码器驱动库，支持速度测量和位置累计 | STM32 | STM32 HAL | 修改定时器配置 | 网友那拿的 |
 
 #### 电机驱动
 
-| 库名 | 说明 | 依赖 | 配置要求 | 来源 |
-|------|------|------|----------|------|
-| [motor](./motor) | 电机驱动库，支持H桥驱动芯片 | STM32 HAL | 修改PWM定时器配置 | 网友那拿的 |
-| [emm_v5](./emm_v5) | Emm_V5步进电机串口协议驱动 | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
-| [tb6612](./tb6612) | TB6612FNG双路DC电机驱动 | STM32 HAL | **必须修改PWM和GPIO配置** | 网友那拿的 |
-| [a4950](./a4950) | A4950双路DC电机驱动 | STM32 HAL | **必须修改PWM和GPIO配置** | 网友那拿的 |
+| 库名 | 说明 | 平台 | 依赖 | 配置要求 | 来源 |
+|------|------|------|------|----------|------|
+| [motor](./motor) | 电机驱动库，支持H桥驱动芯片 | STM32 | STM32 HAL | 修改PWM定时器配置 | 网友那拿的 |
+| [emm_v5](./emm_v5) | Emm_V5步进电机串口协议驱动 | STM32 | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
+| [tb6612](./tb6612) | TB6612FNG双路DC电机驱动 | STM32 | STM32 HAL | **必须修改PWM和GPIO配置** | 网友那拿的 |
+| [a4950](./a4950) | A4950双路DC电机驱动 | STM32 | STM32 HAL | **必须修改PWM和GPIO配置** | 网友那拿的 |
+| [lq_motorservo](./lq_motorservo) | 龙邱电机舵机驱动（PWM） | STC16 | LQ_PWM | **必须修改PWM接口** | 网友那拿的 |
 
 #### 其他外设
 
-| 库名 | 说明 | 依赖 | 配置要求 | 来源 |
-|------|------|------|----------|------|
-| [ebtn](./ebtn) | 按键驱动库，支持组合键和多击检测 | bit_array | 无硬件依赖 | 网友那拿的 |
-| [ad9833](./ad9833) | AD9833 DDS信号发生器驱动 | STM32 HAL | 修改SPI和GPIO配置 | 网友那拿的 |
-| [spi_flash](./spi_flash) | ⚠️ GD25Qxx SPI Flash驱动 | STM32 HAL | **必须修改CS引脚和SPI句柄** | 网友那拿的 |
-| [oled](./oled) | ⚠️ SSD1306 OLED显示驱动（基础） | STM32 HAL | **必须修改I2C/SPI接口** | 网友那拿的 |
-| [waveform_gen](./waveform_gen) | ⚠️ 波形发生器（DAC+DMA+Timer） | STM32 HAL | **必须修改DAC/Timer/DMA句柄** | 网友那拿的 |
-| [maixcam](./maixcam) | MaixCam视觉传感器串口协议解析 | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
+| 库名 | 说明 | 平台 | 依赖 | 配置要求 | 来源 |
+|------|------|------|------|----------|------|
+| [ebtn](./ebtn) | 按键驱动库，支持组合键和多击检测 | 通用 | bit_array | 无硬件依赖 | 网友那拿的 |
+| [ad9833](./ad9833) | AD9833 DDS信号发生器驱动 | STM32 | STM32 HAL | 修改SPI和GPIO配置 | 网友那拿的 |
+| [spi_flash](./spi_flash) | ⚠️ GD25Qxx SPI Flash驱动 | STM32 | STM32 HAL | **必须修改CS引脚和SPI句柄** | 网友那拿的 |
+| [oled](./oled) | ⚠️ SSD1306 OLED显示驱动（基础） | STM32 | STM32 HAL | **必须修改I2C/SPI接口** | 网友那拿的 |
+| [lq_oled096](./lq_oled096) | 龙邱OLED显示驱动（功能完整） | STC16 | LQ_I2C | **必须修改I2C/SPI接口** | 网友那拿的 |
+| [waveform_gen](./waveform_gen) | ⚠️ 波形发生器（DAC+DMA+Timer） | STM32 | STM32 HAL | **必须修改DAC/Timer/DMA句柄** | 网友那拿的 |
+| [maixcam](./maixcam) | MaixCam视觉传感器串口协议解析 | STM32 | STM32 HAL | **必须修改UART接口** | 网友那拿的 |
+| [lq_softi2c](./lq_softi2c) | 软件I2C通信库 | 通用 | GPIO | 修改GPIO定义 | 网友那拿的 |
 
 ### 📦 第三方开源库
 
-| 库名 | 说明 | 依赖 | 注意事项 | 来源 |
-|------|------|------|----------|------|
-| [lfs](./lfs) | LittleFS嵌入式文件系统 | spi_flash | 需实现硬件读写接口 | 第三方开源 |
-| [u8g2](./u8g2) | 功能强大的单色图形库 | I2C/SPI | **字体库37MB，需裁剪** | 第三方开源 |
-| [WouoUI](./WouoUI) | OLED菜单UI框架 | u8g2, ebtn | 需要u8g2和按键驱动 | 第三方开源 |
+| 库名 | 说明 | 平台 | 依赖 | 注意事项 | 来源 |
+|------|------|------|------|----------|------|
+| [lfs](./lfs) | LittleFS嵌入式文件系统 | 通用 | spi_flash | 需实现硬件读写接口 | 第三方开源 |
+| [u8g2](./u8g2) | 功能强大的单色图形库 | 通用 | I2C/SPI | **字体库37MB，需裁剪** | 第三方开源 |
+| [WouoUI](./WouoUI) | OLED菜单UI框架 | 通用 | u8g2, ebtn | 需要u8g2和按键驱动 | 第三方开源 |
 
 ### 🔧 应用层模块（特定场景）
 
-| 库名 | 说明 | 依赖 | 使用场景 | 来源 |
-|------|------|------|----------|------|
-| [shell](./shell) | 🔧 LittleFS命令行Shell | lfs, spi_flash | 文件系统调试 | |
-| [waveform_analyzer](./waveform_analyzer) | 🔧 波形分析器（FFT+谐波） | fft, CMSIS-DSP | **需实现采样率函数** | 玩信号时用过 |
-| [pid_tuner](./pid_tuner) | 🔧 串口命令行PID调参工具 | usart_pack | 实时PID参数调优 | 网友那拿的 |
+| 库名 | 说明 | 平台 | 依赖 | 使用场景 | 来源 |
+|------|------|------|------|----------|------|
+| [shell](./shell) | 🔧 LittleFS命令行Shell | STM32 | lfs, spi_flash | 文件系统调试 | |
+| [waveform_analyzer](./waveform_analyzer) | 🔧 波形分析器（FFT+谐波） | STM32 | fft, CMSIS-DSP | **需实现采样率函数** | 玩信号时用过 |
+| [pid_tuner](./pid_tuner) | 🔧 串口命令行PID调参工具 | STM32 | usart_pack | 实时PID参数调优 | 网友那拿的 |
+| [lcd_menu](./lcd_menu) | 🔧 按键菜单系统 | STM32 | oled, ebtn | 参数调节、功能选择 | 网友那拿的 |
 
 ### 📦 Python工具库（上位机）
 
-| 库名 | 说明 | 依赖 | 适用场景 | 来源 |
-|------|------|------|----------|------|
-| [simple_uart](./simple_uart) | 完整的Python UART管理库 | pyserial | 上位机串口通信、数据采集 | |
-| [perspective_transform](./perspective_transform) | 图像透视变换工具 | OpenCV, NumPy | 视觉伺服、图像校正 | |
+| 库名 | 说明 | 平台 | 依赖 | 适用场景 | 来源 |
+|------|------|------|------|----------|------|
+| [simple_uart](./simple_uart) | 完整的Python UART管理库 | PC | pyserial | 上位机串口通信、数据采集 | |
+| [perspective_transform](./perspective_transform) | 图像透视变换工具 | PC | OpenCV, NumPy | 视觉伺服、图像校正 | |
 
 ## 目录结构
 
